@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const authUser = (req, res, next) => {
   const {token }= req.headers 
-  console.log("Token in headers:", token); // Add log to verify token
+  
 
   if (!token) {
     return res.status(401).json({
@@ -16,7 +16,7 @@ const authUser = (req, res, next) => {
     req.body.userId = decoded_token.id; // Assign userId from token
 
     // Log to verify userId is set in the request body
-    console.log("Request body after setting userId:", req.body);
+    // console.log("Request body after setting userId:", req.body);
 
     next();
   } catch (error) {

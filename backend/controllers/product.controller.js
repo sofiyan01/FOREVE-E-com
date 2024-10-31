@@ -12,7 +12,7 @@ const addProduct=async(req,res)=>{
        const image3= req.files.image3 && req.files.image3[0]
        const image4= req.files.image4 && req.files.image4[0]
 
-       console.log(req.files);
+      
        
        const images=[image1,image2,image3,image4].filter((item)=>item!== undefined) 
 
@@ -68,27 +68,23 @@ const addProduct=async(req,res)=>{
 
 
 }
-
-const listProduct=async(req,res)=>{
-
+const listProduct = async (req, res) => {
     try {
+        const products = await productModel.find({});
         
-        const products=await productModel.find({})
-
         res.status(200).json({
-            success:true,
-            products
-        })
-
+            success: true,
+            products,
+        });
     } catch (error) {
-        console.log(error);
-        res.json({
-            success:false,
-            message:error.message
-        })
-        
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
     }
-}
+};
+
 
 const removeProduct=async(req,res)=>{
 
