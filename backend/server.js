@@ -40,7 +40,7 @@ app.use("/api/order", orderRouter);
 
 // API Endpoints
 app.get("/", (req, res) => {
-    res.json("Working api");
+    res.json("API is Working");
 });
 
 // Listening port
