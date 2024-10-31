@@ -18,7 +18,7 @@ const addProduct = async (req, res) => {
         let imageUrls = await Promise.all(
             images.map(async (item) => {
                 try {
-                    let result = await cloudinary.uploader.upload(item.buffer, { // Use buffer for memory storage
+                    let result = await cloudinary.uploader.upload(item.path, { // Use 'path' instead of 'buffer'
                         resource_type: "image"
                     });
                     console.log(result); // Log the full Cloudinary response
@@ -52,7 +52,8 @@ const addProduct = async (req, res) => {
         console.log(product);
         res.json({
             success: true,
-            message: "Product Added"
+            message: "Product Added",
+            product // Optionally return the added product
         });
 
     } catch (error) {
