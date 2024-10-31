@@ -15,7 +15,7 @@ export const Register=async(req,res)=>{
 try {
 
         if (!name || !email || !password) {
-            return res.status(400).json({
+            return res.json({
                 success:false,
                 message:"All fields are required"
             })
@@ -59,7 +59,7 @@ try {
 
             // const token=generateToken(user._id)
 
-            res.status(201).json({
+            res.json({
                 success:true,
                 message:"Sign up success"
             })
@@ -113,12 +113,16 @@ export const Login=async(req,res)=>{
 
             const token=generateToken(user._id)
 
-            res.status(200).json({
+            res.json({
                 success:true,
                 token
             })
 
     } catch (error) {
+        console.log(error);
+        res.json({
+            error:error.message
+        })
         
     }
 

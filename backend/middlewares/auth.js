@@ -5,7 +5,7 @@ const authUser = (req, res, next) => {
   
 
   if (!token) {
-    return res.status(401).json({
+    return res.json({
       success: false,
       message: "Not Authorized. Please login again.",
     });
@@ -21,7 +21,7 @@ const authUser = (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
-    return res.status(403).json({
+    return res.json({
       success: false,
       message: "Token verification failed.",
     });
