@@ -1,7 +1,10 @@
 import {v2 as cloudinary} from "cloudinary"
 import productModel from "../models/product.model.js"
 
+import productModel from '../models/productModel'; // Adjust the import based on your file structure
+import { v2 as cloudinary } from 'cloudinary';
 
+// Add Product Controller
 const addProduct = async (req, res) => {
     try {
         const { name, description, price, category, subCategory, bestSeller, sizes } = req.body;
@@ -18,10 +21,11 @@ const addProduct = async (req, res) => {
         let imageUrls = await Promise.all(
             images.map(async (item) => {
                 try {
-                    let result = await cloudinary.uploader.upload(item.path, { // Use 'path' instead of 'buffer'
+                    // Use 'buffer' for uploading directly from memory
+                    let result = await cloudinary.uploader.upload(item.buffer, {
                         resource_type: "image"
                     });
-                    console.log(result); // Log the full Cloudinary response
+                    console.log("Uploaded to Cloudinary:", result.secure_url); // Log the URL
                     return result.secure_url; // Ensure result.secure_url exists
                 } catch (error) {
                     console.log("Cloudinary upload error:", error); // Log any Cloudinary errors
@@ -32,6 +36,9 @@ const addProduct = async (req, res) => {
 
         // Filter out null URLs
         imageUrls = imageUrls.filter(url => url !== null);
+
+        // Log the collected image URLs for debugging
+        console.log("Image URLs:", imageUrls);
 
         // Creating products
         const productData = {
@@ -49,7 +56,7 @@ const addProduct = async (req, res) => {
         const product = new productModel(productData);
         await product.save();
 
-        console.log(product);
+        console.log("Product saved:", product); // Log the saved product
         res.json({
             success: true,
             message: "Product Added",
@@ -57,13 +64,16 @@ const addProduct = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error);
-        res.json({
+        console.log("Error in addProduct:", error);
+        res.status(500).json({
             success: false,
             message: error.message // Send error message
         });
     }
 };
+
+
+
 
 
 const listProduct = async (req, res) => {
