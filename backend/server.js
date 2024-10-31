@@ -20,11 +20,8 @@ connectCloudinary();
 app.use(express.json())
 app.use(morgan("common"))
 
-app.use(cors({
-    origin: ["http://localhost:3000", "https://foreve-e-frontendz.vercel.app"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,  // if you need to allow cookies or auth headers
-  }));
+app.use(cors()); // allow all origins
+
 
 // app.use(bodyParser(urlencoded:{true}))
 app.use("/api/user",userRouter)
