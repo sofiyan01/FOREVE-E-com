@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
-     "postinstall": "npm install --legacy-peer-deps"
+     "postinstall": ""
   },
   "author": "",
   "license": "ISC",
