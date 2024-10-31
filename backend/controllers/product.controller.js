@@ -1,37 +1,31 @@
 import {v2 as cloudinary} from "cloudinary"
 import productModel from "../models/product.model.js"
 
-
 const addProduct = async (req, res) => {
     try {
         const { name, description, price, category, subCategory, bestSeller, sizes } = req.body;
+        
+        const image1 = req.files.image1 && req.files.image1[0];
+        const image2 = req.files.image2 && req.files.image2[0];
+        const image3 = req.files.image3 && req.files.image3[0];
+        const image4 = req.files.image4 && req.files.image4[0];
 
-        // Get images from req.files
-        const images = [
-            req.files.image1 && req.files.image1[0],
-            req.files.image2 && req.files.image2[0],
-            req.files.image3 && req.files.image3[0],
-            req.files.image4 && req.files.image4[0]
-        ].filter(item => item !== undefined);
+        const images = [image1, image2, image3, image4].filter(item => item !== undefined);
 
-        // Upload images to Cloudinary
         let imageUrls = await Promise.all(
             images.map(async (item) => {
                 try {
-                    let result = await cloudinary.uploader.upload(item.buffer, { // Use 'path' instead of 'buffer'
+                    let result = await cloudinary.uploader.upload(item.path, {
                         resource_type: "image"
                     });
-                    console.log(result); // Log the full Cloudinary response
-                    return result.secure_url; // Ensure result.secure_url exists
+                    console.log(result);  // Log the full Cloudinary response
+                    return result.secure_url;  // Ensure result.secure_url exists
                 } catch (error) {
-                    console.log("Cloudinary upload error:", error); // Log any Cloudinary errors
-                    return null; // Return null for failed uploads
+                    console.log("Cloudinary upload error:", error);  // Log any Cloudinary errors
+                    return null;
                 }
             })
         );
-
-        // Filter out null URLs
-        imageUrls = imageUrls.filter(url => url !== null);
 
         // Creating products
         const productData = {
@@ -40,9 +34,9 @@ const addProduct = async (req, res) => {
             price: Number(price),
             category,
             subCategory,
-            bestSeller: bestSeller === "true", // Convert string to boolean
-            images: imageUrls, // Store the image URLs
-            sizes: JSON.parse(sizes), // Parse sizes from JSON string
+            bestSeller: bestSeller === "true" ? true : false,
+            image: imageUrls,
+            sizes: JSON.parse(sizes),
             date: Date.now()
         };
 
@@ -52,18 +46,17 @@ const addProduct = async (req, res) => {
         console.log(product);
         res.json({
             success: true,
-            message: "Product Added",
-            product // Optionally return the added product
+            message: "Product Added"
         });
-
     } catch (error) {
         console.log(error);
         res.json({
             success: false,
-            message: error.message // Send error message
+            message: error.message
         });
     }
 };
+
 
 
 const listProduct = async (req, res) => {
