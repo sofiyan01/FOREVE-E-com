@@ -38,7 +38,7 @@ function Add({ token }) {
             image4 && formData.append('image4', image4);
 
             const response = await axios.post(
-                'https://foreve-e-backend.vercel.app//api/product/add',
+                'https://foreve-e-backend.vercel.app/api/product/add',
                 formData,
                 { headers: { token } }
             );
