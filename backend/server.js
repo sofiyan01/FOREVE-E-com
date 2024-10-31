@@ -29,14 +29,8 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-    origin: (origin, callback) => {
-        if (allowedOrigins.includes(origin) || !origin) { // Allow requests with no origin like mobile apps
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true, // Enable credentials if needed
+    origin: allowedOrigins,
+    credentials: true,
 }));
 
 app.use("/api/user", userRouter);
@@ -51,5 +45,5 @@ app.get("/", (req, res) => {
 
 // Listening port
 app.listen(port, () => {
-    console.log(`server is running on ${port}`);
+    console.log(`Server is running on port ${port}`);
 });
